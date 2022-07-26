@@ -1,0 +1,19 @@
+{
+  "name": "eslint-prettier",
+  "version": "1.0.0",
+  "description": "",
+  "main": "text.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/torumanabe/ESLInt-Prettier.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/torumanabe/ESLInt-Prettier/issues"
+  },
+  "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme"
+}
