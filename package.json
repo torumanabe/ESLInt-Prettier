@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/torumanabe/ESLInt-Prettier/issues"
   },
-  "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme"
+  "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme",
+  "devDependencies": {
+    "eslint": "^8.21.0"
+  }
 }

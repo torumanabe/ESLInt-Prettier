@@ -27,7 +27,7 @@ $ eslint -v バージョン確認
 ```
 
 test.js やらarobviewのjsファイルをディレクトリに持ってきて以下を実行。
-
+nodebrew -v
 ```
 $ eslint 対象ファイル
 ```
