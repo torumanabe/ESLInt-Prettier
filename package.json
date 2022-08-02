@@ -18,5 +18,8 @@
   "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme",
   "devDependencies": {
     "eslint": "^8.21.0"
+  },
+  "dependencies": {
+    "prettier": "^2.7.1"
   }
 }

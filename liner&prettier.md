@@ -41,6 +41,7 @@ $ npm install prettier
 ```
 .eslintrc.json をプロジェクトルートディレクトリに作成し、以下を追加。
 
+```
 {
     "extends": [
 		//eslintの団体が推奨してるやつ
@@ -71,11 +72,20 @@ $ npm install prettier
         "prettier/prettier": "error"
     }
 }
-
+```
 VScode拡張機能のES Lint, Prettierを追加。
 control + ,
 
+コマンドパレットでformatを検索し、format Documentを選択。
+configureから次に、Prettier - Code Formatterを選択。
+
+保存時にフォーマットする
+
+setting menu を開いて、Editor:Format On Save
+にチェックを入れる。
+
 setting.jsonに追加。
+```
 {
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
@@ -96,6 +106,7 @@ setting.jsonに追加。
   "files.trimTrailingWhitespace": true,
   "npm.packageManager": "yarn"
 }
+```
 
 ESLintの拡張機能を入れた時点でエラーが赤く表示されるので、エラーを解消しつつ、
 command＋Sで保存と同時にprettierの整形も実行。
