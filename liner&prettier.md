@@ -23,15 +23,17 @@ eslintのインストール
 
 ```
 $ npm install -g eslint
-$ eslint -v バージョン確認
+//バージョン確認
+$ eslint -v
 ```
 
 test.js やらarobviewのjsファイルをディレクトリに持ってきて以下を実行。
-nodebrew -v
+
 ```
-$ eslint 対象ファイル
+$ eslint <対象ファイル>
 ```
-エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。 問題なければ何も表示されない。
+エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。
+問題なければ何も表示されません。
 
 prettierのインストール
 ----------------------------------------
@@ -79,10 +81,14 @@ control + ,
 コマンドパレットでformatを検索し、format Documentを選択。
 configureから次に、Prettier - Code Formatterを選択。
 
-保存時にフォーマットする
+### 保存時にフォーマットする
 
 setting menu を開いて、Editor:Format On Save
 にチェックを入れる。
+
+### Prettier設定ファイルの作成
+
+.prettier.jsonをプロジェクトルートに作成し、取り入れたいルールを記載していくことで、フォーマット時に反映され、設定ファイルをチームで共有することでフォーマットの一貫性を保つことができる。
 
 setting.jsonに追加。
 ```
