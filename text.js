@@ -1,6 +1,6 @@
 function hello(name) {
     document.body.textContent =
-        "Hfdgbsbelloaerhqehwthwrtjerjgshhhethsrtjrjteryj, " + name + "!";
+        "Hfdgbsbelloaerhqehwthwrtjerjgshhhethsrtjrjteryj, " + nome + "!";
 }
 hello("World");
 
