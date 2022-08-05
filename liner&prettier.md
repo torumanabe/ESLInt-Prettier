@@ -120,7 +120,25 @@ command＋Sで保存と同時にprettierの整形も実行。
 
 https://zenn.dev/sawao/articles/6ad32596a82174
 
+Git commit時に自動でlintを実行する(huskyとlint-staged)
 
+```
+npm install mrm lint-staged
+```
+
+下をpacheage.jsonに追加
+
+```
+ "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,json}": "prettier --write"
+  }
+```
 ESLintや Prettierを使うには必ずnode.jsが必要だが、node.jsで作られているプロダクトは現状少ない。
 将来的に作り、そこに組み込むのははわかっているが、たたき台としては現在あるウェブアプリのフォーマット統一と、潜在的なエラーの解消に注力した方が良いのではという気がする。
 既存プロジェクトのpush時に静的解析を組み込むには、nodejsを使う必要があり、難しくなっているため、
