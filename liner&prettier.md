@@ -5,6 +5,9 @@ ESLint&Prettier 2022/08/10
 準備
 ----------------------------------------
 Node.jsのインストール
+
+#16.17.0 LTS
+
 インストール方法 ：https://miya-system-works.com/blog/detail/179
 Node.js公式サイト：https://nodejs.org/en/
 
@@ -22,59 +25,83 @@ eslintのインストール
 ### インストール
 
 ```
-$ npm install -g eslint
-//バージョン確認
-$ eslint -v
+$ npm install eslint --save-dev
+インストールできたか確認。
+$ npx eslint -v
 ```
 
-test.js やらarobviewのjsファイルをディレクトリに持ってきて以下を実行。
-
-```
-$ eslint <対象ファイル>
-```
-エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。
-問題なければ何も表示されません。
-
-prettierのインストール
-----------------------------------------
-
-```
-$ npm install prettier
-```
 .eslintrc.json をプロジェクトルートディレクトリに作成し、以下を追加。
 
 ```
 {
     "extends": [
-		//eslintの団体が推奨してるやつ
-		"eslint:recommended",
-		 "prettier"
+		//eslintの団体が推奨しているもの
+		  "eslint:recommended",
+      //prettiernのルールとぶつからないようにするためのもの
+      "prettier"
 	],
     "plugins": [],
     "parserOptions": {
-        "ecmaVersion": 2015
+      "ecmaVersion": 2015
     },
     "env": {
-        "browser": true
+      "browser": true
     },
     "globals": {
-	    //グローバル定義の変数や関数はこちらに記載して避ける。
+	    //グローバル定義の変数や関数はこちらに記載して未定義エラーを避ける。
         "$": "readonly",
-        "Localize": "readonly",
-        "sanitize": "readonly",
-        "ShowDialog": "readonly",
-        "mapItemMax": "readonly",
-        "mapItemMin": "readonly",
-        "ListItemUI": "readonly"
     },
     "rules": {
 	      //コロンを必須に
         "semi": "error",
-	      //バッティングを避ける
+	      //prettierとのバッティングを避ける
         "prettier/prettier": "error"
     }
 }
 ```
+
+jsファイルを作成し、以下を実行。
+
+```
+$ eslint <対象ファイル>
+```
+
+セミコロンの付与など、軽微な修正を自動で行いたい場合は、
+```
+npx eslint <対象ファイル> --fix
+```
+
+エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。
+問題なければ何も表示されません。
+
+VScode拡張機能のES Lintを入れることで、コマンド実行前に、エラーになってる箇所を風船マークで示してくれます。
+
+
+prettierのインストール
+----------------------------------------
+PrettierとESLintのフォーマットルールがぶつからないようにするためのルールセット(config)も一緒に導入。
+```
+$ npm install --save-dev prettier eslint-config-prettier
+```
+
+### Prettier設定ファイルの作成
+
+.prettier.jsonをプロジェクトルートに作成し、取り入れたいルールを記載していくことで、フォーマット時に反映される。 設定ファイルをチームで共有することで一貫性を保つことができる。
+
+例
+```
+{
+	"semi": true,
+	"trailingComma": "all",
+	"tabWidth": 4
+}
+```
+
+実行コマンド
+```
+npx prettier --write test.js
+```
+
 VScode拡張機能のES Lint, Prettierを追加。
 control + ,
 
@@ -86,11 +113,24 @@ configureから次に、Prettier - Code Formatterを選択。
 setting menu を開いて、Editor:Format On Save
 にチェックを入れる。
 
-### Prettier設定ファイルの作成
+### ESlintとPrettierのnpm-scripts設定
 
-.prettier.jsonをプロジェクトルートに作成し、取り入れたいルールを記載していくことで、フォーマット時に反映される。
-設定ファイルをチームで共有することでフォーマットの一貫性を保つことができる。
+プロジェクト内のjsファイルに対して実行されるように設定します。
 
+npm-run-allのインストール
+```
+npm install --save-dev npm-run-all
+```
+package.jsonのscriptsに以下を追記
+
+```
+"eslint": "eslint *.js",
+"eslint:fix": "eslint *.js --fix",
+"format": "prettier --write *.js",
+"lint:fix": "npm-run-all eslint format"
+```
+
+それぞれnpm run eslint などで実行できる事を確認。
 setting.jsonに追加。
 ```
 {
@@ -120,7 +160,7 @@ command＋Sで保存と同時にprettierの整形も実行。
 
 https://zenn.dev/sawao/articles/6ad32596a82174
 
-Git commit時に自動でlintを実行する(huskyとlint-staged)
+### Git commit時に自動でlintを実行する(huskyとlint-staged)
 
 ```
 npm install mrm lint-staged
@@ -139,8 +179,6 @@ npm install mrm lint-staged
     "*.{js,json}": "prettier --write"
   }
 ```
-ESLintや Prettierを使うには必ずnode.jsが必要だが、node.jsで作られているプロダクトは現状少ない。
-将来的に作り、そこに組み込むのははわかっているが、たたき台としては現在あるウェブアプリのフォーマット統一と、潜在的なエラーの解消に注力した方が良いのではという気がする。
-既存プロジェクトのpush時に静的解析を組み込むには、nodejsを使う必要があり、難しくなっているため、
-別でnode.jsプロジェクトを作成し、VScodeで簡単に取り入れられる拡張機能を利用し、
-そこに既存アプリのjsファイルをコピペし、そこで修正とフォーマッタにかけて元のファイルと入れ替えるなどが即効性が高いとおもう。
+
+push時に行うにはpre-pushに下記を記載。
+"pre-push": "lint-staged"
