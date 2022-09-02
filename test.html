@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Vue app</title>
+  <script src="https://unpkg.com/vue@2"></script>
+  <script src="https://unpkg.com/vuex"></script>
+  <script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.js"></script>
+</head>
+<body>
+  <!-- アプリのHTMLテンプレートを定義 -->
+  <div id="app">
+    <label>name</label>
+    <input type="text" v-model="name">
+    <label>gender</label>
+    <select v-model="gender">
+      <option value="male">male</option>
+      <option value="female">female</option>
+    </select>
+    <br/>
+    <grobal-component-child :name="name" :gender="gender" @my-click="getMessage"></grobal-component-child>
+
+  </div>
+
+  <script>
+
+    const store = new Vuex.Store({
+      state: {
+        greeting: "おげんき？"
+      },
+      getters: {
+        greeting: state => state.greeting,
+      },
+      mutations: {
+        setHello(state) {
+          state.greeting;
+        }
+      },
+      actions: {
+        doUpdategreeting({ commit }, greeting) {
+          commit('setHello', { greeting } + "だそうです。" );
+          //console.log(store.state.greeting);
+        }
+      }
+    });
+
+    Vue.component('grobal-component-child', {
+      props: {
+         name:{
+          type: String,
+          default: ""
+        },
+        gender:{
+          type: String,
+          default: ""
+        }
+      },
+      template: `
+        <ul>
+          <li v-for="hello in helloList" :key=hello >
+            <button @click="Updategreeting"> {{ hello }} </button>
+          </li>
+        </ul>
+      `,
+      data: function () {
+        return {
+          select: false,
+          malehello:   [ 'おはよう', 'こんにちは', 'こんばんは'],
+          femalehello: [ 'おはようございます。', 'ご機嫌麗しゅう。', '夜分にすみません。']
+        }
+      },
+      computed: {
+        helloList () { 
+          if( this.name && this.gender ){ 
+            let hellos = ( this.gender === "male" ) ? this.malehello : this.femalehello; 
+            let yourgrettings = [];
+            hellos.forEach(hello => { yourgrettings.push( this.name + "さん " + hello); });
+            return yourgrettings;
+          }
+        },
+      },
+      methods: {
+        onClickButton(e) {
+          this.select = true;
+          if( this.select ) this.$emit("my-click", e.target.textContent );
+        },
+        Updategreeting(e) {
+          store.commit(e.target.textContent);
+        }
+      }
+    });
+
+    // アプリを定義
+    var app = new Vue({
+      el: '#app',
+      data: {
+        name:"",
+        gender:"",
+        message: "",
+      },
+      computed: {
+        greeting () {
+          return store.state.greeting
+        }
+      },
+      methods: {
+        getMessage(value) { return this.message = value; },
+      },
+    });
+  </script>
+</body>
+</html>
