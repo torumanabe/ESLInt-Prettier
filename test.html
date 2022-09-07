@@ -57,6 +57,13 @@
       template: `
         <ul>
           <li v-for="hello in helloList" :key=hello >
+            <input //これでファイルダイアログを追加できる
+              accept=".jpg,.jpeg,.png,.gif"
+              style="display: none"
+              ref="input"
+              type="file"
+              @change="selectedFile()"
+            >
             <button @click="Updategreeting"> {{ hello }} </button>
           </li>
         </ul>

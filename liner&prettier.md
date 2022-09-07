@@ -182,3 +182,14 @@ npm install mrm lint-staged
 
 push時に行うにはpre-pushに下記を記載。
 "pre-push": "lint-staged"
+
+
+
+vueにおけるCROS対応
+https://nkeke0.hatenablog.com/entry/2021/02/23/173434
+
+
+https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Function/call
+
+input type="file" を使わずにカッコよくファイルをアップ路度する方法。
+https://qiita.com/nobu17/items/e2fcf12696d175bb369f
