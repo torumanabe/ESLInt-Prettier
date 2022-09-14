@@ -23,3 +23,8 @@ this.Request = function () {
         .post("/rs/mapeditor/php/mapeditor.php", [param])
         .then((response) => (this.returnData = response));
 };
+
+//ブラウザ判定。
+const agent = window.navigator.userAgent.toLowerCase();
+const whichExpand = agent.indexOf("edg") != -1 ? "collapsable" : "expandable";
+console.log(whichExpand);
