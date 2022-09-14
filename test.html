@@ -18,7 +18,7 @@
     </select>
     <br/>
     <grobal-component-child :name="name" :gender="gender" ></grobal-component-child>
-    <Greeting></Greeting>
+    <show-greeting></show-greeting>
   </div>
 
   <script>
@@ -78,10 +78,10 @@
       }
     });
 
-    Vue.component('Greeting', {
+    Vue.component('show-greeting', {
         template: `<div>{{ selectHello }}</div>`,
         computed: {
-          selectHello () {  return store.getters.showGreeting }
+          selectHello () { return store.getters.showGreeting }
         }
       }
     );
