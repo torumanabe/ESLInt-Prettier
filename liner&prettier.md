@@ -38,7 +38,7 @@ $ npx eslint -v
 		//eslintの団体が推奨しているもの
 		  "eslint:recommended",
       //prettiernのルールとぶつからないようにするためのもの
-      "prettier"
+      "eslint-config-prettier"
 	],
     "plugins": [],
     "parserOptions": {
@@ -86,7 +86,8 @@ $ npm install --save-dev prettier eslint-config-prettier
 
 ### Prettier設定ファイルの作成
 
-.prettier.jsonをプロジェクトルートに作成し、取り入れたいルールを記載していくことで、フォーマット時に反映される。 設定ファイルをチームで共有することで一貫性を保つことができる。
+.prettier.jsonをプロジェクトルートに作成し、取り入れたいルールを記載していくことで、フォーマット時に反映される。
+設定ファイルをチームで共有することで一貫性を保つことができる。
 
 例
 ```
