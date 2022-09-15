@@ -39,9 +39,9 @@
     "*.js": "eslint"
   },
   "prettier": {
-    "doubleQuote": true,
     "semi": true,
+    "singleQuote": true,
     "trailingComma": "all",
-    "tabWidth": 4
+    "tabWidth": 2
   }
 }
