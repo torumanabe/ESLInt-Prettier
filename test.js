@@ -1,8 +1,14 @@
 function hello(name) {
-  document.body.textContent =
-    'Hfdgbsbelloaerhqehwthwrtjerjgshhhethsrtjrjteryj, ' + name + '!';
+  document.body.textContent = 'Hfdgbsbelloaerhqehwthwrtjerjgshhheryj, ' + name + '!';
 }
 hello('World');
+
+/*globals $ */
+function hello2(name) {
+  $(document.body).text('Hello, ' + name + '!');
+}
+
+hello2('World');
 
 const testFunc = (a, b, c) => {
   let message = 'helloWorld';

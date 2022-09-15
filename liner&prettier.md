@@ -22,8 +22,6 @@ eslintのインストール
 ----------------------------------------
 プロジェクト作成後、プロジェクトルートに移動し、以下コマンドを実行
 
-### インストール
-
 ```
 $ npm install eslint --save-dev
 インストールできたか確認。
@@ -37,25 +35,20 @@ $ npx eslint -v
     "extends": [
 		//eslintの団体が推奨しているもの
 		  "eslint:recommended",
-      //prettiernのルールとぶつからないようにするためのもの
-      "eslint-config-prettier"
 	],
     "plugins": [],
     "parserOptions": {
       "ecmaVersion": 2015
     },
     "env": {
-      "browser": true
+      "browser": true,
+      "node":true
     },
-    "globals": {
-	    //グローバル定義の変数や関数はこちらに記載して未定義エラーを避ける。
-        "$": "readonly",
-    },
+    "globals": {},
     "rules": {
 	      //コロンを必須に
         "semi": "error",
 	      //prettierとのバッティングを避ける
-        "prettier/prettier": "error"
     }
 }
 ```
@@ -65,6 +58,11 @@ jsファイルを作成し、以下を実行。
 ```
 $ eslint <対象ファイル>
 ```
+グローバル変数に対するエラーが起こることがあるのですが、その場合はファイルに直接
+/*globals $ */
+として教えてあげる事でエラーを避けることができます。
+packaage.json内のgrobalsに書いてやる事でも回避できるので調べて設定してみてください。
+
 
 セミコロンの付与など、軽微な修正を自動で行いたい場合は、
 ```
@@ -74,7 +72,7 @@ npx eslint <対象ファイル> --fix
 エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。
 問題なければ何も表示されません。
 
-VScode拡張機能のES Lintを入れることで、コマンド実行前に、エラーになってる箇所を風船マークで示してくれます。
+VScode拡張機能のESLintを入れることで、コマンド実行前に、エラー箇所を予め風船マークで示してくれます。
 
 
 prettierのインストール
@@ -84,19 +82,24 @@ PrettierとESLintのフォーマットルールがぶつからないようにす
 $ npm install --save-dev prettier eslint-config-prettier
 ```
 
-### Prettier設定ファイルの作成
+### Prettier設定
 
-.prettier.jsonをプロジェクトルートに作成し、取り入れたいルールを記載していくことで、フォーマット時に反映される。
-設定ファイルをチームで共有することで一貫性を保つことができる。
+package.json に取り入れたいルールを記載することで、フォーマット時に反映される。
+特にルールを入れなくても規定のルールが機能するのでルールを入れるか否かも好み。
+https://prettier.io/docs/en/options.html  こちらにオプション一覧があるので下のルールを設定してみてください。
 
-例
+例 ・tabの幅を4にしたい時（デフォルトは２）。
+
 ```
-{
-	"semi": true,
-	"trailingComma": "all",
+"prettier": {
 	"tabWidth": 4
 }
 ```
+
+設定したいルール
+・シングルクオートしか認めないようにしたい。ダブルクオート禁止。
+・Bracket Spacingを作るようにしてみてください。 例 {foo: bar} ではなく { foo: bar }
+・デフォルト80字だけど、１行40字にしたい。
 
 実行コマンド
 ```
@@ -111,7 +114,8 @@ configureから次に、Prettier - Code Formatterを選択。
 
 ### 保存時にフォーマットする
 
-setting menu を開いて、Editor:Format On Save
+setting menu を開いて、
+Editor:Format On Save
 にチェックを入れる。
 
 ### ESlintとPrettierのnpm-scripts設定
