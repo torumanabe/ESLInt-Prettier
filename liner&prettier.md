@@ -27,28 +27,42 @@ $ npm install eslint --save-dev
 インストールできたか確認。
 $ npx eslint -v
 ```
+npx eslint --initコマンドで対話的にESLintを構成。
 
-.eslintrc.json をプロジェクトルートディレクトリに作成し、以下を追加。
+```
+✔ How would you like to use ESLint? · style
+✔ What type of modules does your project use? · esm
+✔ Which framework does your project use? · none
+✔ Does your project use TypeScript? · No / Yes
+✔ Where does your code run? · browser, node
+✔ How would you like to define a style for your project? · guide
+✔ Which style guide do you want to follow? · standard
+✔ What format do you want your config file to be in? · JSON
+Checking peerDependencies of eslint-config-standard@latest
+The config that you've selected requires the following dependencies:
+
+eslint-config-standard@latest eslint@^8.0.1 eslint-plugin-import@^2.25.2 eslint-plugin-n@^15.0.0 eslint-plugin-promise@^6.0.0
+✔ Would you like to install them now? · No / Yes
+✔ Which package manager do you want to use? · npm
+```
+
+.eslintrc.json が作成されるので、下のようになっていれば大丈夫です。
 
 ```
 {
-    "extends": [
-		//eslintの団体が推奨しているもの
-		  "eslint:recommended",
-	],
-    "plugins": [],
-    "parserOptions": {
-      "ecmaVersion": 2015
-    },
     "env": {
-      "browser": true,
-      "node":true
+        "browser": true,
+        "es2021": true,
+        "node": true
     },
-    "globals": {},
+    "extends": [
+        "standard"
+    ],
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
     "rules": {
-	      //コロンを必須に
-        "semi": "error",
-	      //prettierとのバッティングを避ける
     }
 }
 ```
@@ -61,7 +75,7 @@ $ eslint <対象ファイル>
 グローバル変数に対するエラーが起こることがあるのですが、その場合はファイルに直接
 /*globals $ */
 として教えてあげる事でエラーを避けることができます。
-packaage.json内のgrobalsに書いてやる事でも回避できるので調べて設定してみてください。
+.eslintrc.json内のgrobalsに書いてやる事でも回避できるので、調べて設定してみてください。
 
 
 セミコロンの付与など、軽微な修正を自動で行いたい場合は、
@@ -74,10 +88,13 @@ npx eslint <対象ファイル> --fix
 
 VScode拡張機能のESLintを入れることで、コマンド実行前に、エラー箇所を予め風船マークで示してくれます。
 
-
+*vueに特化したルールを追加したい場合は
+```
+$ npm install --save-dev eslint-plugin-vue
+```
 prettierのインストール
 ----------------------------------------
-PrettierとESLintのフォーマットルールがぶつからないようにするためのルールセット(config)も一緒に導入。
+PrettierとESLintのフォーマットルールがぶつからないようにするためのルールセット(config)も一緒に導入。eslintrcのrulesを無視してくれます。
 ```
 $ npm install --save-dev prettier eslint-config-prettier
 ```
@@ -85,10 +102,10 @@ $ npm install --save-dev prettier eslint-config-prettier
 ### Prettier設定
 
 package.json に取り入れたいルールを記載することで、フォーマット時に反映される。
-特にルールを入れなくても規定のルールが機能するのでルールを入れるか否かも好み。
+特にルールを入れなくてもデフォルトのルールが機能するのでルールを追加するかかも好み。
 https://prettier.io/docs/en/options.html  こちらにオプション一覧があるので下のルールを設定してみてください。
 
-例 ・tabの幅を4にしたい時（デフォルトは２）。
+例 tabの幅を4にしたい時（デフォルトは２）。
 
 ```
 "prettier": {
