@@ -13,7 +13,6 @@
         "sourceType": "module"
     },
     "globals": {},
-    "rules": {
-    }
+    "rules": {}
 }
 
