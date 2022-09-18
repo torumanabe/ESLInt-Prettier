@@ -5,10 +5,11 @@
   "main": "text.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "prettier --write *.js",
+    "format": "prettier src/*.js --write",
     "start": "node .",
-    "eslint": "eslint *.js",
-    "eslint:fix": "eslint *.js --fix"
+    "lint": "eslint src/*.js",
+    "lint:fix": "eslint src/*.js --fix",
+    "lint:fix && format": "eslint src/*.js --fix && format"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.1",
     "mrm": "^0.1.2",
     "prettier": "^2.7.1"
   },
@@ -38,7 +40,10 @@
     }
   },
   "lint-staged": {
-    "*.js": "eslint"
+    "*.js": [
+      "eslint:fix",
+      "format"
+    ]
   },
   "prettier": {
     "semi": true,

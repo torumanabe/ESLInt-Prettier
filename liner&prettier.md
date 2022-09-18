@@ -1,22 +1,9 @@
-ESLint&Prettier 2022/08/10
+ESLint&Prettier 2022/09/23
 =====================
-
 
 準備
 ----------------------------------------
-Node.jsのインストール
-
-#16.17.0 LTS
-
-インストール方法 ：https://miya-system-works.com/blog/detail/179
-Node.js公式サイト：https://nodejs.org/en/
-
-### Node.jsプロジェクト作成
-```
-$ npm init
-```
-実行するといくつか質問されます。すべて何も入力せずEnterで進めてください。
-
+今回は練習用のNode.jsプロジェクトをリポジトリからpull。
 
 eslintのインストール
 ----------------------------------------
@@ -24,12 +11,14 @@ eslintのインストール
 
 ```
 $ npm install eslint --save-dev
-インストールできたか確認。
+//インストールできたか確認。
 $ npx eslint -v
 ```
-npx eslint --initコマンドで対話的にESLintを構成。
 
+.eslintrc.jsonの作成。
+自分で書くより楽なので対話的に.eslintrc.jsonを作成します。
 ```
+$ npx eslint --init
 ✔ How would you like to use ESLint? · style
 ✔ What type of modules does your project use? · esm
 ✔ Which framework does your project use? · none
@@ -48,8 +37,7 @@ eslint-config-standard@latest eslint@^8.0.1 eslint-plugin-import@^2.25.2 eslint-
 
 .eslintrc.json が作成されるので、下のようになっていれば大丈夫です。
 
-```
-{
+```{
     "env": {
         "browser": true,
         "es2021": true,
@@ -64,27 +52,18 @@ eslint-config-standard@latest eslint@^8.0.1 eslint-plugin-import@^2.25.2 eslint-
     },
     "rules": {
     }
-}
-```
+}```
 
-jsファイルを作成し、以下を実行。
-
-```
-$ eslint <対象ファイル>
-```
-グローバル変数に対するエラーが起こることがあるのですが、その場合はファイルに直接
-/*globals $ */
-として教えてあげる事でエラーを避けることができます。
-.eslintrc.json内のgrobalsに書いてやる事でも回避できるので、調べて設定してみてください。
-
-
+src/index.jsに対して以下を実行。
+```$ eslint src/index.js```
 セミコロンの付与など、軽微な修正を自動で行いたい場合は、
-```
-npx eslint <対象ファイル> --fix
-```
+```npx eslint src/index.js --fix```
+eslintはファイル１つ１つの内容しか見ないので、グローバル変数に対するエラーが起こることがあるのですが、その場合はファイルに直接
+```/*globals $ */```
+などとして教えてあげる事でエラーを避けることができます。
+ .eslintrc.json内のgrobalsに書いてやる事でも回避できるので、調べて設定してみてください。
 
-エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。
-問題なければ何も表示されません。
+ エラー内容がよくわからない場合は https://eslint.org/docs/latest/rules/ ルール一覧から検索。問題なければ何も表示されません。
 
 VScode拡張機能のESLintを入れることで、コマンド実行前に、エラー箇所を予め風船マークで示してくれます。
 
@@ -92,36 +71,32 @@ VScode拡張機能のESLintを入れることで、コマンド実行前に、�
 ```
 $ npm install --save-dev eslint-plugin-vue
 ```
+を打った後、extendsに"vue"を追加。
+
 prettierのインストール
 ----------------------------------------
 PrettierとESLintのフォーマットルールがぶつからないようにするためのルールセット(config)も一緒に導入。eslintrcのrulesを無視してくれます。
-```
-$ npm install --save-dev prettier eslint-config-prettier
-```
+```$ npm install --save-dev prettier eslint-config-prettier```
 
 ### Prettier設定
-
-package.json に取り入れたいルールを記載することで、フォーマット時に反映される。
-特にルールを入れなくてもデフォルトのルールが機能するのでルールを追加するかかも好み。
-https://prettier.io/docs/en/options.html  こちらにオプション一覧があるので下のルールを設定してみてください。
-
-例 tabの幅を4にしたい時（デフォルトは２）。
+package.json に取り入れたいルールを記載することで、フォーマット時に反映されます。（.prettierrc.jsonを作ってそちらに書いても動きます。)
+ 特にルールを入れなくてもデフォルトのルールが機能するので折り入ってルールを追加するかも好みです。
+ https://prettier.io/docs/en/options.html  こちらにオプション一覧があるので、下のルールを設定してみてください。
 
 ```
+//例 tabの幅を4にしたい時（デフォルトは２）。
 "prettier": {
 	"tabWidth": 4
 }
 ```
 
 設定したいルール
-・シングルクオートしか認めないようにしたい。ダブルクオート禁止。
-・Bracket Spacingを作るようにしてみてください。 例 {foo: bar} ではなく { foo: bar }
+・シングルクオートしか使えないようにしたい。ダブルクオート禁止。
+・Bracket Spacingを作るようにしたい。 例 {foo: bar} ではなく { foo: bar }
 ・デフォルト80字だけど、１行40字にしたい。
 
 実行コマンド
-```
-npx prettier --write test.js
-```
+```npx prettier src/index.js --write```
 
 VScode拡張機能のES Lint, Prettierを追加。
 control + ,
@@ -137,59 +112,22 @@ Editor:Format On Save
 
 ### ESlintとPrettierのnpm-scripts設定
 
-プロジェクト内のjsファイルに対して実行されるように設定します。
-
 npm-run-allのインストール
-```
-npm install --save-dev npm-run-all
-```
+```npm install --save-dev npm-run-all```
 package.jsonのscriptsに以下を追記
 
-```
-"eslint": "eslint *.js",
-"eslint:fix": "eslint *.js --fix",
-"format": "prettier --write *.js",
-"lint:fix": "npm-run-all eslint format"
-```
+```"eslint": "eslint *.js",
+"eslint:fix": "eslint src/*.js --fix",
+"format": "prettier --write src/*.js",
+"lint:fix": "npm-run-all eslint format"```
 
 それぞれnpm run eslint などで実行できる事を確認。
-setting.jsonに追加。
-```
-{
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  },
-  "eslint.format.enable": false,
-  "editor.formatOnSave": true,
-  "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-  },
-  "editor.lineNumbers": "on",
-  "editor.rulers": [80],
-  "editor.wordWrap": "on",
-  "eslint.packageManager": "yarn",
-  "files.insertFinalNewline": true,
-  "files.trimTrailingWhitespace": true,
-  "npm.packageManager": "yarn"
-}
-```
 
-ESLintの拡張機能を入れた時点でエラーが赤く表示されるので、エラーを解消しつつ、
-command＋Sで保存と同時にprettierの整形も実行。
+### git commit時に自動でlintを実行する(huskyとlint-staged)
 
-https://zenn.dev/sawao/articles/6ad32596a82174
-
-### Git commit時に自動でlintを実行する(huskyとlint-staged)
-
-```
-npm install mrm lint-staged
-```
+```npm install mrm lint-staged```
 
 下をpacheage.jsonに追加
-
 ```
  "husky": {
     "hooks": {
