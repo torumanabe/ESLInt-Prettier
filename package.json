@@ -49,7 +49,9 @@
   "prettier": {
     "semi": true,
     "singleQuote": true,
-    "tabWidth": 2,
-    "printWidth": 40
+    "tabWidth": 4,
+    "printWidth": 40,
+    "trailingComma": "es5",
+    "arrowParens": "avoid"
   }
 }
