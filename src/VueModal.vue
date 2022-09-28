@@ -8,6 +8,9 @@
       @click.self="closeModal()"
     >
       <div class="modal-window">
+        <header>
+          マップリスト
+        </header>
         <div class="modal-content">
           <ul>
             <li
@@ -70,9 +73,25 @@ export default {
             CurrentMap.isRootMap = mapInfo.isRootMap;
             CurrentMap.mapName = mapInfo.mapName;
             const list = request.returnData.mapDetailList;
+            for (let i in list) {
+              let detailItem = new customModule.default.MapDetailItem();
+              detailItem.typeId = list[i].typeId;
+              detailItem.typePrimaryId = list[i].typePrimaryId;
+              detailItem.left = list[i].left;
+              detailItem.top = list[i].top;
+              detailItem.height = list[i].bottom - detailItem.top;
+              detailItem.width = list[i].right - detailItem.left;
+              detailItem.instanceType = list[i].instanceType;
+              detailItem.itemDefaultImageId = list[i].itemImageId; //defaut = itemimage
+              detailItem.itemImageId = list[i].itemImageId;
+              detailItem.itemMouseOverImageId = list[i].itemMouseOverImageId;
+              detailItem.itemMouseDownImageId = list[i].itemMouseDownImageId;
+              detailItem.itemDisableImageId = list[i].itemDisableImageId;
+              detailItem.zIndex = list[i].zIndex;
+              editMapItem.AddMapDetailItem(detailItem);
+            }
+            editMapItem.SetMapImage(FinishedFn);
             //0928ここまで。
-            for (let i in list) {}
-
             self.SetMapImage(FinishedFn);
           } else { FinishedFn(false, msg); }
         });
