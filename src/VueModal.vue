@@ -23,7 +23,7 @@
           </ul>
         </div>
         <footer class="modal-footer">
-          <button @click="mapOpen()">開く</button>
+          <button @click="mapOpen(mapid)">開く</button>
           <button @click="closeModal()">閉じる</button>
         </footer>
       </div>
@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     mouseDown(mapId) { this.mapid = mapId; },
-    mapOpen() {
+    mapOpen(mapID) {
       let request = new RequestServer();
       request.prm = { sessionKey: this.SessionKey, mapId: this.mapid };
       request.methodName = "GetMapDetailInfo";
@@ -64,7 +64,15 @@ export default {
           if (detailSuccess) {
             editMapItem.ClearMapDetailItem();
             let CurrentMap = new customModule.default.MapInfo();
+            const mapInfo = mapList.GetMapByID(mapID);
+            CurrentMap.mapId = mapInfo.mapId;
+            CurrentMap.mapImageId = mapInfo.mapImageId;
+            CurrentMap.isRootMap = mapInfo.isRootMap;
+            CurrentMap.mapName = mapInfo.mapName;
+            const list = request.returnData.mapDetailList;
             //0928ここまで。
+            for (let i in list) {}
+
             self.SetMapImage(FinishedFn);
           } else { FinishedFn(false, msg); }
         });
