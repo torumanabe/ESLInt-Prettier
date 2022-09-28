@@ -24,22 +24,11 @@ this.Request = function () {
     console.log(JSON.stringify(param));
 
     axios
-        .post(
-            '/rs/mapeditor/php/mapeditor.php',
-            [param]
-        )
-        .then(
-            response =>
-                (this.returnData =
-                    response)
-        );
+        .post('/rs/mapeditor/php/mapeditor.php', [param])
+        .then(response => (this.returnData = response));
 };
 
 // ブラウザ判定。
-const agent =
-    window.navigator.userAgent.toLowerCase();
-const whichExpand =
-    agent.indexOf('edg') !== -1
-        ? 'collapsable'
-        : 'expandable';
+const agent = window.navigator.userAgent.toLowerCase();
+const whichExpand = agent.indexOf('edg') !== -1 ? 'collapsable' : 'expandable';
 console.log(whichExpand);
