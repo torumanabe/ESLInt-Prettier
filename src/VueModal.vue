@@ -49,7 +49,7 @@ export default {
   data: () => {
     return {
       mapid: null,
-      SessionKey: "c8d72e9d304928e34b73120f35cba6a2",
+      SessionKey: "",
     };
   },
   methods: {
@@ -91,15 +91,7 @@ export default {
               detailItem.zIndex               = dList[i].zIndex;
               editMapItem.AddMapDetailItem(detailItem);
             }
-            mapImageList.Request();
-            mapImageList.Finished(function (su, msg) {
-              if (su) {
-                CurrentMap.mapImageUrl = mapImageList.GetMapImageByID(CurrentMap.mapImageId).mapImageUrl;
-                console.log(CurrentMap.mapImageUrl);
-                self.DefaultItemImageListReady(FinishedFn);
-                console.log("detailItem");
-              } else { FinishedFn(false, msg); }
-            });
+            editMapItem.SetMapImage(FinishedFn);
           } else { FinishedFn(false, msg); }
         });
       });
