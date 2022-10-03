@@ -5,37 +5,53 @@
         <h3>
           <a href="#" />
         </h3>
-        <ul
-          id="cameraTree"
-          class="filetree"
-        />
+        <ul>
+          <li
+            v-for="camera in CameraList"
+            :key="camera"
+          >
+            {{ camera.cameraGroupName }}
+          </li>
+        </ul>
       </div>
       <div id="accordionCustomview">
         <h3>
           <a href="#" />
         </h3>
-        <ul
-          id="customviewTree"
-          class="filetree"
-        />
+        <ul>
+          <li
+            v-for="customview in CustomviewList"
+            :key="customview"
+          >
+            {{ customview.customViewName }}
+          </li>
+        </ul>
       </div>
       <div id="accordionMap">
         <h3>
           <a href="#" />
         </h3>
-        <ul
-          id="MapTree"
-          class="filetree"
-        />
+        <ul>
+          <li
+            v-for="mapview in MapList"
+            :key="mapview"
+          >
+            {{ mapview.mapName }}
+          </li>
+        </ul>
       </div>
       <div id="accordionOther">
         <h3>
           <a href="#" />
         </h3>
-        <ul
-          id="otherTree"
-          class="filetree"
-        />
+        <ul>
+          <li
+            v-for="command in CommandList"
+            :key="command"
+          >
+            {{ command.CommandName }}
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -68,7 +84,7 @@ export default {
             if (su) {
                 this.CameraList = editMapItem.cameraGroupList.GetGroupList();
                 let img = new Image();
-                for (let i in list) {
+                for (let i in this.CameraList) {
                     const groupId = list[i].cameraGroupId;
                     let html = "<li class='' groupId='" + groupId + "'><img class='group' src='./img/group.png' />" +
                         "<span>" + list[i].cameraGroupName + "</span>";
@@ -84,12 +100,12 @@ export default {
                 img.src = self.editMapItem.cameraList.DefaultImageUrl;
             }
         });
-        editMapItem.customViewList.Finished( (su) => {ß
+        editMapItem.customViewList.Finished( (su) => {
             if (su) {
                 let img = new Image();
-                this.CsutomviewList = editMapItem.customViewList.GetCustomViewList();
-                console.log(list);
-                for (let i in list) {
+                this.CustomviewList = editMapItem.customViewList.GetCustomViewList();
+                console.log(CustomviewList);
+                for (let i in CustomviewList) {
                     const itemUI = new ListItemUI(
                         self.editMapItem.customViewList.typeID,
                         list[i].customViewId,
@@ -111,7 +127,7 @@ export default {
             if (su) {
                 let img = new Image();
                 this.MapList = editMapItem.mapList.GetMapList();
-                for (let i in list) {
+                for (let i in MapList) {
                     const itemUI = new ListItemUI(
                         self.editMapItem.mapList.typeID,
                         list[i].mapId,
