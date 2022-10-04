@@ -10,6 +10,7 @@
             v-for="camera in CameraList"
             :key="camera"
           >
+            <img src="../assets/img/group.png">
             {{ camera.cameraGroupName }}
           </li>
         </ul>
@@ -23,19 +24,21 @@
             v-for="customview in CustomviewList"
             :key="customview"
           >
+            <img src="../assets/img/customview.png">
             {{ customview.customViewName }}
           </li>
         </ul>
       </div>
       <div id="accordionMap">
-        <h3>
+        <h3> 
           <a href="#" />
         </h3>
         <ul>
-          <li
+          <li 
             v-for="mapview in MapList"
             :key="mapview"
           >
+            <img src="../assets/img/map.png">
             {{ mapview.mapName }}
           </li>
         </ul>
@@ -49,6 +52,7 @@
             v-for="command in CommandList"
             :key="command"
           >
+            <img src="../assets/img/other.png">
             {{ command.CommandName }}
           </li>
         </ul>
@@ -59,6 +63,7 @@
 
 <script>
 import AccordionUI from "../../js/customLibs/ui/accordionUI.js";
+import ListItemUI from "../../js/customLibs/ui/listItemUI.js";
 import EditMapItem from "/js/customLibs/editMapItem.js";
 
 const $ = require('jquery');
@@ -80,99 +85,85 @@ export default {
         let accordion = new AccordionUI(document.getElementById("accordion"));
         accordion.Init(editMapItem);
         accordion.BindCameraGroup();
-        editMapItem.cameraGroupList.Finished( (su, msg) => {
-            if (su) {
-                this.CameraList = editMapItem.cameraGroupList.GetGroupList();
-                let img = new Image();
-                for (let i in this.CameraList) {
-                    const groupId = list[i].cameraGroupId;
-                    let html = "<li class='' groupId='" + groupId + "'><img class='group' src='./img/group.png' />" +
-                        "<span>" + list[i].cameraGroupName + "</span>";
-                    html += (list[i].existCamera || list[i].existGroup)
-                        ? "<ul id='group_" + groupId + "'></ul></li>"
-                        : "</li>";
-                    const parentId = list[i].parentId;
-                    const branches = (parentId == 0)
-                        ? $(html).appendTo(cameraTree)
-                        : $(html).appendTo($("#group_" + parentId));
+        editMapItem.cameraGroupList.Finished(() => {
+            this.CameraList = editMapItem.cameraGroupList.GetGroupList();
+            let img = new Image();
+            img.src = editMapItem.cameraList.DefaultImageUrl;
+            for (let i in this.CameraList) {
+                const groupId = this.CameraList[i].cameraGroupId;
+                let html = "<li groupId='" + groupId + "'><span>" + this.CameraList[i].cameraGroupName + "</span>";
+                html += (this.CameraList[i].existCamera || this.CameraList[i].existGroup)
+                    ? "<ul id='group_" + groupId + "'></ul></li>"
+                    : "</li>";
+                const parentId = this.CameraList[i].parentId;
+                /*const branches = (parentId == 0)
+                    ? $(html).appendTo(cameraTree)
+                    : $(html).appendTo($("#group_" + parentId));
 
-                }
-                img.src = self.editMapItem.cameraList.DefaultImageUrl;
+                cameraTree.tree({
+                    collapsed: false,
+                    add: branches
+                });*/
             }
+
         });
-        editMapItem.customViewList.Finished( (su) => {
-            if (su) {
-                let img = new Image();
-                this.CustomviewList = editMapItem.customViewList.GetCustomViewList();
-                console.log(CustomviewList);
-                for (let i in CustomviewList) {
-                    const itemUI = new ListItemUI(
-                        self.editMapItem.customViewList.typeID,
-                        list[i].customViewId,
-                        sanitize(list[i].customViewName),
-                        img
-                    );
-                    self.AddItemToArray(itemUI._typeID, itemUI._itemID, itemUI);
-                    itemUI.editMapItem = self.editMapItem;
-                    itemUI.accordionUI = self;
-                    itemUI.$item.find("img").attr("src", "./img/customview.png");
-                    $item.append(itemUI.$item);
-                    customTree.append($item);
-                    customTree.treeview({add: $item});
-                }
-                img.src = self.editMapItem.customViewList.DefaultImageUrl;
+        editMapItem.customViewList.Finished(() => {
+            let img = new Image();
+            this.CustomviewList = editMapItem.customViewList.GetCustomViewList();
+            for (let i in this.CustomviewList) {
+                const itemUI = new ListItemUI(
+                    editMapItem.customViewList.typeID,
+                    this.CustomviewList[i].customViewId,
+                    this.CustomviewList[i].customViewName,
+                    img
+                );
+                accordion.AddItemToArray(itemUI);
+                itemUI.editMapItem = editMapItem;
+                itemUI.accordionUI = accordion;
+                //customTree.append($item);
+                //customTree.treeview({add: $item}); //DRAGDROP使えるようにツリービューは必須か。
             }
+            img.src = editMapItem.customViewList.DefaultImageUrl;
         });
-        editMapItem.mapList.Finished( (su) => {
-            if (su) {
-                let img = new Image();
-                this.MapList = editMapItem.mapList.GetMapList();
-                for (let i in MapList) {
-                    const itemUI = new ListItemUI(
-                        self.editMapItem.mapList.typeID,
-                        list[i].mapId,
-                        list[i].mapName,
-                        img
-                    );
-                    self.AddItemToArray(itemUI._typeID, itemUI._itemID, itemUI);
-                    itemUI.editMapItem = self.editMapItem;
-                    itemUI.accordionUI = self;
-                    itemUI.$item.find("img").attr("src", "./img/map.png");
-                    $item.append(itemUI.$item);
-                    mapTree.append($item);
-                    mapTree.treeview({ add: $item });
-                }
-                img.src = self.editMapItem.mapList.DefaultImageUrl;
+        editMapItem.mapList.Finished(() => {
+            let img = new Image();
+            this.MapList = editMapItem.mapList.GetMapList();
+            for (let i in this.MapList) {
+                const itemUI = new ListItemUI(editMapItem.mapList.typeID,
+                    this.MapList[i].mapId, 
+                    this.MapList[i].mapName,
+                    img
+                );
+                accordion.AddItemToArray(itemUI);
+                itemUI.editMapItem = editMapItem;
+                itemUI.accordionUI = accordion;
+                //mapTree.append($item);
+                //SmapTree.treeview({ add: $item });
             }
+            img.src = editMapItem.mapList.DefaultImageUrl;
         });
-        editMapItem.commandList.Finished( (su) => {
-            if (su) {
-                this.CommandList = editMapItem.commandList.GetCommandList();
-                const func = (i) => {
-                    let img = new Image();
-                    img.onload = (e) => {
-                        this.onload = null; // for animation GIF
-                        const nameList = {"4": Localize.TEXT_COMMAND_PREV, "5": Localize.TEXT_COMMAND_NEXT};
-                        const id = list[i].commandId;
-                        const name = nameList[id];
-                        const itemUI = new ListItemUI(
-                            self.editMapItem.commandList.typeID,
-                            id,
-                            name,
-                            img
-                        );
-                        self.AddItemToArray(itemUI._typeID, itemUI._itemID, itemUI);
-                        itemUI.editMapItem = self.editMapItem;
-                        itemUI.accordionUI = self;
-                        itemUI.$item.find("img").attr("src", "./img/other.png");
-                        $item.append(itemUI.$item);
-                        commandTree.append($item);
-                        commandTree.treeview({ add: $item });
-                    }
-                    img.src = self.editMapItem.defaultItemImageList.GetDefaultItemImageByID(parseInt(list[i].commandId)).mapItemDefaultImageUrl;
-                };
-                for (let i in list) { func(i); }
+        editMapItem.commandList.Finished(() => {
+            let img = new Image();
+            this.CommandList = editMapItem.commandList.GetCommandList();
+            const func = (i) => {
+                const nameList = {"4": Localize.TEXT_COMMAND_PREV, "5": Localize.TEXT_COMMAND_NEXT};
+                const id = this.CommandList[i].commandId;
+                const name = nameList.id;
+                console.log(name);
+                const itemUI = new ListItemUI(
+                    editMapItem.commandList.typeID,
+                    id,
+                    name,
+                    img
+                );
+                accordion.AddItemToArray(itemUI);
+                itemUI.editMapItem = editMapItem;
+                itemUI.accordionUI = accordion;
+                //commandTree.append($item);
+                //commandTree.treeview({ add: $item });
             }
+            img.src = editMapItem.defaultItemImageList.GetDefaultItemImageByID(parseInt(list[i].commandId)).mapItemDefaultImageUrl;
+            for (let i in list) { func(i); }
         });
     },
     methods: {
