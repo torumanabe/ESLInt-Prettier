@@ -5,21 +5,21 @@
         <h3>
           <a href="#" />
         </h3>
-        <ul>
-          <li
-            v-for="camera in CameraList"
-            :key="camera"
-          >
-            <img src="../assets/img/group.png">
-            {{ camera.cameraGroupName }}
-          </li>
-        </ul>
+        <draggable
+          v-model="CameraList"
+          item-key="id"
+        >
+          <template #item="{ camera }">
+            <!--<img src="../assets/img/group.png">-->
+            <div>{{ camera.CameraGroupName }}</div>
+          </template>
+        </draggable>
       </div>
       <div id="accordionCustomview">
         <h3>
           <a href="#" />
         </h3>
-        <ul>
+        <draggable tag="ul">
           <li
             v-for="customview in CustomviewList"
             :key="customview"
@@ -27,14 +27,14 @@
             <img src="../assets/img/customview.png">
             {{ customview.customViewName }}
           </li>
-        </ul>
+        </draggable>
       </div>
       <div id="accordionMap">
-        <h3> 
+        <h3>
           <a href="#" />
         </h3>
         <ul>
-          <li 
+          <li
             v-for="mapview in MapList"
             :key="mapview"
           >
@@ -145,25 +145,20 @@ export default {
         editMapItem.commandList.Finished(() => {
             let img = new Image();
             this.CommandList = editMapItem.commandList.GetCommandList();
-            const func = (i) => {
-                const nameList = {"4": Localize.TEXT_COMMAND_PREV, "5": Localize.TEXT_COMMAND_NEXT};
-                const id = this.CommandList[i].commandId;
-                const name = nameList.id;
-                console.log(name);
+            for (let i in this.CommandList) {
+                const nameList = {"4": Localize.TEXT_COMMAND_PREV, "5": Localize.TEXT_COMMAND_NEXT};S
                 const itemUI = new ListItemUI(
                     editMapItem.commandList.typeID,
-                    id,
-                    name,
+                    this.CommandList[i].commandId,
+                    nameList[id],
                     img
                 );
-                accordion.AddItemToArray(itemUI);
+                itemUI.Init();
+                this.accordion.AddItemToArray(itemUI);
                 itemUI.editMapItem = editMapItem;
-                itemUI.accordionUI = accordion;
-                //commandTree.append($item);
-                //commandTree.treeview({ add: $item });
+                itemUI.accordionUI = this.accordion;
             }
-            img.src = editMapItem.defaultItemImageList.GetDefaultItemImageByID(parseInt(list[i].commandId)).mapItemDefaultImageUrl;
-            for (let i in list) { func(i); }
+            img.src = editMapItem.defaultItemImageList.GetDefaultItemImageByID(parseInt(this.CommandList[i].commandId)).mapItemDefaultImageUrl;
         });
     },
     methods: {
