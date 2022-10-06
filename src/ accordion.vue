@@ -6,12 +6,16 @@
           <a href="#" />
         </h3>
         <draggable
-          v-model="CameraList"
+          :list="CameraGroupList"
           item-key="id"
+          tag="ul"
+          :clone="onclone"
         >
-          <template #item="{ camera }">
-            <!--<img src="../assets/img/group.png">-->
-            <div>{{ camera.CameraGroupName }}</div>
+          <template #item="{ element }">
+            <li>
+              <img src="../assets/img/group.png">
+              {{ element.cameraGroupName }}
+            </li>
           </template>
         </draggable>
       </div>
@@ -19,43 +23,55 @@
         <h3>
           <a href="#" />
         </h3>
-        <draggable tag="ul">
-          <li
-            v-for="customview in CustomviewList"
-            :key="customview"
-          >
-            <img src="../assets/img/customview.png">
-            {{ customview.customViewName }}
-          </li>
+        <draggable
+          :list="CustomviewList"
+          item-key="cameraGroupId"
+          tag="ul"
+          :clone="onclone"
+        >
+          <template #item="{ element }">
+            <li>
+              <img src="../assets/img/customview.png">
+              {{ element.customViewName }}
+            </li>
+          </template>
         </draggable>
       </div>
       <div id="accordionMap">
         <h3>
           <a href="#" />
         </h3>
-        <ul>
-          <li
-            v-for="mapview in MapList"
-            :key="mapview"
-          >
-            <img src="../assets/img/map.png">
-            {{ mapview.mapName }}
-          </li>
-        </ul>
+        <draggable
+          :list="MapList"
+          item-key="id"
+          tag="ul"
+          :clone="onclone"
+        >
+          <template #item="{ element }">
+            <li>
+              <img src="../assets/img/map.png">
+              {{ element.mapName }}
+            </li>
+          </template>
+        </draggable>
       </div>
       <div id="accordionOther">
         <h3>
           <a href="#" />
         </h3>
-        <ul>
-          <li
-            v-for="command in CommandList"
-            :key="command"
-          >
-            <img src="../assets/img/other.png">
-            {{ command.CommandName }}
-          </li>
-        </ul>
+        <draggable
+          :list="CommandList"
+          item-key="id"
+          tag="ul"
+          :clone="onclone"
+        >
+          <template #item="{ element }">
+            <li>
+              <img src="../assets/img/other.png">
+              {{ element.commandId }}
+            </li>
+          </template>
+        </draggable>
       </div>
     </div>
   </div>
@@ -63,16 +79,25 @@
 
 <script>
 import AccordionUI from "../../js/customLibs/ui/accordionUI.js";
-import ListItemUI from "../../js/customLibs/ui/listItemUI.js";
+import ListItemUI  from "../../js/customLibs/ui/listItemUI.js";
 import EditMapItem from "/js/customLibs/editMapItem.js";
 
 const $ = require('jquery');
+import draggable from 'vuedraggable';
+import treeview from "vue3-treeview";
+import "vue3-treeview/dist/style.css";
 
 export default {
     name: 'ItemAccordion',
+    components: {
+        draggable,
+        //treeview
+    },
     data: () => {
         return {
             SessionKey: "c8d72e9d304928e34b73120f35cba6a2",
+            accordion:      [],
+            CameraGroupList:[],
             CameraList:     [],
             CustomviewList: [],
             MapList:        [],
@@ -82,30 +107,22 @@ export default {
     mounted () {
         let editMapItem = new EditMapItem(this.SessionKey);
         editMapItem.Init();
-        let accordion = new AccordionUI(document.getElementById("accordion"));
-        accordion.Init(editMapItem);
-        accordion.BindCameraGroup();
+        this.accordion = new AccordionUI(document.getElementById("accordion"));
+        this.accordion.Init(editMapItem);
         editMapItem.cameraGroupList.Finished(() => {
-            this.CameraList = editMapItem.cameraGroupList.GetGroupList();
+            this.CameraGroupList = editMapItem.cameraGroupList.GetGroupList();
+            //console.log(this.CameraList);
             let img = new Image();
             img.src = editMapItem.cameraList.DefaultImageUrl;
             for (let i in this.CameraList) {
                 const groupId = this.CameraList[i].cameraGroupId;
                 let html = "<li groupId='" + groupId + "'><span>" + this.CameraList[i].cameraGroupName + "</span>";
                 html += (this.CameraList[i].existCamera || this.CameraList[i].existGroup)
-                    ? "<ul id='group_" + groupId + "'></ul></li>"
-                    : "</li>";
+                    ? "<ul id='group_" + groupId + "'></ul></li>" : "</li>";
                 const parentId = this.CameraList[i].parentId;
-                /*const branches = (parentId == 0)
-                    ? $(html).appendTo(cameraTree)
-                    : $(html).appendTo($("#group_" + parentId));
-
-                cameraTree.tree({
-                    collapsed: false,
-                    add: branches
-                });*/
+                const branches = (parentId == 0)
+                    ? $(html).appendTo("#cameragroup") : $(html).appendTo($("#group_" + parentId));
             }
-
         });
         editMapItem.customViewList.Finished(() => {
             let img = new Image();
@@ -117,11 +134,10 @@ export default {
                     this.CustomviewList[i].customViewName,
                     img
                 );
-                accordion.AddItemToArray(itemUI);
+                itemUI.Init();
+                this.accordion.AddItemToArray(itemUI);
                 itemUI.editMapItem = editMapItem;
-                itemUI.accordionUI = accordion;
-                //customTree.append($item);
-                //customTree.treeview({add: $item}); //DRAGDROP使えるようにツリービューは必須か。
+                itemUI.accordionUI = this.accordion;
             }
             img.src = editMapItem.customViewList.DefaultImageUrl;
         });
@@ -129,24 +145,24 @@ export default {
             let img = new Image();
             this.MapList = editMapItem.mapList.GetMapList();
             for (let i in this.MapList) {
-                const itemUI = new ListItemUI(editMapItem.mapList.typeID,
+                const itemUI = new ListItemUI(
+                    editMapItem.mapList.typeID,
                     this.MapList[i].mapId, 
                     this.MapList[i].mapName,
                     img
                 );
-                accordion.AddItemToArray(itemUI);
+                itemUI.Init();
+                this.accordion.AddItemToArray(itemUI);
                 itemUI.editMapItem = editMapItem;
-                itemUI.accordionUI = accordion;
-                //mapTree.append($item);
-                //SmapTree.treeview({ add: $item });
+                itemUI.accordionUI = this.accordion;
             }
             img.src = editMapItem.mapList.DefaultImageUrl;
         });
         editMapItem.commandList.Finished(() => {
             let img = new Image();
             this.CommandList = editMapItem.commandList.GetCommandList();
-            for (let i in this.CommandList) {
-                const nameList = {"4": Localize.TEXT_COMMAND_PREV, "5": Localize.TEXT_COMMAND_NEXT};S
+            for (let i in this.CommandList) { 
+                const nameList = {"4": "back", "5": "next"};
                 const itemUI = new ListItemUI(
                     editMapItem.commandList.typeID,
                     this.CommandList[i].commandId,
@@ -162,7 +178,13 @@ export default {
         });
     },
     methods: {
+        onclone: () => {
+            let editMapItem = new EditMapItem("c8d72e9d304928e34b73120f35cba6a2");
+            editMapItem.Init();
+            let accordion = new AccordionUI(document.getElementById("accordion"));
+            accordion.Init(editMapItem);
+            accordion.GetDragHelper();
+        }
+
     },
 }
-
-</script>
