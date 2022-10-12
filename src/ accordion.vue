@@ -111,17 +111,24 @@ export default {
         this.accordion.Init(editMapItem);
         editMapItem.cameraGroupList.Finished(() => {
             this.CameraGroupList = editMapItem.cameraGroupList.GetGroupList();
-            //console.log(this.CameraList);
+            let cameraGroupJson = JSON.stringify(this.CameraGroupList);
             let img = new Image();
-            img.src = editMapItem.cameraList.DefaultImageUrl;
-            for (let i in this.CameraList) {
-                const groupId = this.CameraList[i].cameraGroupId;
-                let html = "<li groupId='" + groupId + "'><span>" + this.CameraList[i].cameraGroupName + "</span>";
-                html += (this.CameraList[i].existCamera || this.CameraList[i].existGroup)
-                    ? "<ul id='group_" + groupId + "'></ul></li>" : "</li>";
-                const parentId = this.CameraList[i].parentId;
-                const branches = (parentId == 0)
-                    ? $(html).appendTo("#cameragroup") : $(html).appendTo($("#group_" + parentId));
+            for (let i in this.CameraGroupList) {
+                let cameraList = [];
+                const cameraNameList = new custom.CameraNameList(this.SessionKey, this.CameraGroupList[i].cameraGroupId);
+                cameraNameList.Request();
+                cameraNameList.Finished( (su) => {
+                    const camList = cameraNameList.GetCameraByGroupID();
+                    for (let j in camList) {
+                        if (!camList[j].cameraId) { continue; }
+                        cameraList.push(camList[j]);
+                    }
+                    if(cameraList.length != 0) {
+                        const camerajson = JSON.stringify(cameraList);
+                        cameraGroupJson.cameraList = camerajson;
+                        console.log(cameraGroupJson);
+                    }
+                });
             }
         });
         editMapItem.customViewList.Finished(() => {
