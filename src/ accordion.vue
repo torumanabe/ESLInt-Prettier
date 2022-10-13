@@ -111,23 +111,40 @@ export default {
         this.accordion.Init(editMapItem);
         editMapItem.cameraGroupList.Finished(() => {
             this.CameraGroupList = editMapItem.cameraGroupList.GetGroupList();
-            let cameraGroupJson = JSON.stringify(this.CameraGroupList);
             let img = new Image();
             for (let i in this.CameraGroupList) {
-                let cameraList = [];
                 const cameraNameList = new custom.CameraNameList(this.SessionKey, this.CameraGroupList[i].cameraGroupId);
                 cameraNameList.Request();
                 cameraNameList.Finished( (su) => {
+                    const groupTree = $("#group_" + this.CameraGroupList[i].cameraGroupId);
+                    if (groupTree.parent().hasClass("expandable")) { groupTree.hide(); }
+                    let img = new Image();
+                    img.src = editMapItem.cameraList.DefaultImageUrl;
                     const camList = cameraNameList.GetCameraByGroupID();
                     for (let j in camList) {
                         if (!camList[j].cameraId) { continue; }
-                        cameraList.push(camList[j]);
+                        const $cam = $("<li></li>");
+                        const itemUI = new ListItemUI(
+                            cameraNameList.typeID,
+                            camList[j].cameraId,
+                            camList[j].cameraName,
+                            img
+                        );
+                        itemUI.Init();
+                        itemUI.groupName = camList[j].cameraGroupName;
+                        this.accordion.AddItemToArray(itemUI.typeID, itemUI.itemID, itemUI);
+                        itemUI.editMapItem = this.editMapItem;
+                        itemUI.accordionUI = this.accordion;
+                        //itemUI.$item.find("img").attr("src", "/assets/img/camera.png");
+
+                        $cam.append(itemUI.$item);
+                        $cam.appendTo(groupTree);
+                        $("#cameraTree").treeview({
+                            collapsed: false,
+                            add: $cam
+                        });
                     }
-                    if(cameraList.length != 0) {
-                        const camerajson = JSON.stringify(cameraList);
-                        cameraGroupJson.cameraList = camerajson;
-                        console.log(cameraGroupJson);
-                    }
+
                 });
             }
         });
@@ -154,7 +171,7 @@ export default {
             for (let i in this.MapList) {
                 const itemUI = new ListItemUI(
                     editMapItem.mapList.typeID,
-                    this.MapList[i].mapId, 
+                    this.MapList[i].mapId,
                     this.MapList[i].mapName,
                     img
                 );
