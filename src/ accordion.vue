@@ -113,38 +113,38 @@ export default {
             this.CameraGroupList = editMapItem.cameraGroupList.GetGroupList();
             let img = new Image();
             for (let i in this.CameraGroupList) {
-                const cameraNameList = new custom.CameraNameList(this.SessionKey, this.CameraGroupList[i].cameraGroupId);
-                cameraNameList.Request();
-                cameraNameList.Finished( (su) => {
-                    const groupTree = $("#group_" + this.CameraGroupList[i].cameraGroupId);
-                    if (groupTree.parent().hasClass("expandable")) { groupTree.hide(); }
-                    let img = new Image();
-                    img.src = editMapItem.cameraList.DefaultImageUrl;
-                    const camList = cameraNameList.GetCameraByGroupID();
-                    for (let j in camList) {
-                        if (!camList[j].cameraId) { continue; }
-                        const $cam = $("<li></li>");
-                        const itemUI = new ListItemUI(
-                            cameraNameList.typeID,
-                            camList[j].cameraId,
-                            camList[j].cameraName,
-                            img
-                        );
+              const camGroupId = this.CameraGroupList[i].cameraGroupId;
+              const cameraNameList = new custom.CameraNameList(this.SessionKey, camGroupId);
+              cameraNameList.Request();
+              cameraNameList.Finished( (su) => {
+                  const groupTree = $("#group_" + camGroupId);
+                  if (groupTree.parent().hasClass("expandable")) { groupTree.hide(); }
+                  let img = new Image();
+                  img.src = editMapItem.cameraList.DefaultImageUrl;
+                  const camList = cameraNameList.GetCameraByGroupID();
+                  for (let j in camList) {
+                      if (!camList[j].cameraId) { continue; }
+                      const $cam = $("<li></li>");
+                      const itemUI = new ListItemUI(
+                          cameraNameList.typeID,
+                          camList[j].cameraId,
+                          camList[j].cameraName,
+                          img
+                      );
                         itemUI.Init();
                         itemUI.groupName = camList[j].cameraGroupName;
                         this.accordion.AddItemToArray(itemUI.typeID, itemUI.itemID, itemUI);
                         itemUI.editMapItem = this.editMapItem;
                         itemUI.accordionUI = this.accordion;
-                        //itemUI.$item.find("img").attr("src", "/assets/img/camera.png");
-
+                        itemUI.$item.find("img").attr("src", "/assets/img/camera.png");
                         $cam.append(itemUI.$item);
                         $cam.appendTo(groupTree);
-                        $("#cameraTree").treeview({
+                        $(`#cameraTree${camGroupId}`).tree({
                             collapsed: false,
                             add: $cam
                         });
                     }
-
+                    this.accordion.camGetGroupList.push(camGroupId);
                 });
             }
         });
