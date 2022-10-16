@@ -54,47 +54,10 @@ export default {
   },
   methods: {
     mouseDown(mapId) { this.mapid = mapId; },
-    mapOpen(mapID) {
-      let request = new RequestServer();
-      request.prm = { sessionKey: this.SessionKey, mapId: this.mapid };
-      request.methodName = "GetMapDetailInfo";
-      const mapList = new customModule.default.MapList(this.SessionKey);
-      const mapImageList = new customModule.default.MapImageList(this.SessionKey);
-      const editMapItem = new EditMapItem(this.SessionKey);
-      mapList.Request();
-      mapList.Finished((su, msg) => {
-        request.Request();
-        request.Finished(function (detailSuccess, msg) {
-          if (detailSuccess) {
-            editMapItem.ClearMapDetailItem();
-            let CurrentMap = new customModule.default.MapInfo();
-            const mapInfo = mapList.GetMapByID(mapID);
-            CurrentMap.mapId = mapInfo.mapId;
-            CurrentMap.mapImageId = mapInfo.mapImageId;
-            CurrentMap.isRootMap = mapInfo.isRootMap;
-            CurrentMap.mapName = mapInfo.mapName;
-            const dList = request.returnData.mapDetailList;
-            for (let i in dList) {
-              let detailItem = new customModule.default.MapDetailItem();
-              detailItem.typeId               = dList[i].typeId;
-              detailItem.typePrimaryId        = dList[i].typePrimaryId;
-              detailItem.left                 = dList[i].left;
-              detailItem.top                  = dList[i].top;
-              detailItem.height               = dList[i].bottom - detailItem.top;
-              detailItem.width                = dList[i].right - detailItem.left;
-              detailItem.instanceType         = dList[i].instanceType;
-              detailItem.itemDefaultImageId   = dList[i].itemImageId; //defaut:itemimage
-              detailItem.itemImageId          = dList[i].itemImageId;
-              detailItem.itemMouseOverImageId = dList[i].itemMouseOverImageId;
-              detailItem.itemMouseDownImageId = dList[i].itemMouseDownImageId;
-              detailItem.itemDisableImageId   = dList[i].itemDisableImageId;
-              detailItem.zIndex               = dList[i].zIndex;
-              editMapItem.AddMapDetailItem(detailItem);
-            }
-            editMapItem.SetMapImage(FinishedFn);
-          } else { FinishedFn(false, msg); }
-        });
-      });
+    mapOpen() {
+      const editMapItem = new EditMapItem();
+      editMapItem.Init();
+      editMapItem.OpenMap(this.mapid);
       this.closeModal();
     },
     closeModal() { this.$emit("my-click", false); }

@@ -5,19 +5,17 @@
         <h3>
           <a href="#" />
         </h3>
-        <draggable
-          :list="CameraGroupList"
-          item-key="id"
-          tag="ul"
-          :clone="onclone"
-        >
-          <template #item="{ element }">
-            <li>
-              <img src="../assets/img/group.png">
-              {{ element.cameraGroupName }}
-            </li>
-          </template>
-        </draggable>
+        <ul>
+          <li
+            v-for="(item, key) in CameraGroupList"
+            :id="`cameraTree${item.cameraGroupId}`"
+            :key="key"
+          >
+            <img src="../assets/img/group.png">
+            {{ item.cameraGroupName }}
+            <tree :config="config" :nodes="nodes"> </tree>
+          </li>
+        </ul>
       </div>
       <div id="accordionCustomview">
         <h3>
@@ -81,11 +79,10 @@
 import AccordionUI from "../../js/customLibs/ui/accordionUI.js";
 import ListItemUI  from "../../js/customLibs/ui/listItemUI.js";
 import EditMapItem from "/js/customLibs/editMapItem.js";
+import custom      from "/js/custom.js";
 
 const $ = require('jquery');
 import draggable from 'vuedraggable';
-import treeview from "vue3-treeview";
-import "vue3-treeview/dist/style.css";
 
 export default {
     name: 'ItemAccordion',
