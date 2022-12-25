@@ -5,7 +5,7 @@ const mockLoginAction = login => {
     const actionInjector = require('inject-loader!@/store/actions');
 
     const actionMocks = actionInjector({
-        ',,/api': {
+        '../api': {
             Autth: { login },
         },
     });
