@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme",
   "devDependencies": {
+    "@vue/test-utils": "^2.2.6",
     "eslint": "^8.23.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
