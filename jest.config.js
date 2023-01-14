@@ -1,4 +1,4 @@
 module.exports = {
-  //preset: '@vue/vue2-jest',
-  transformIgnorePatterns: ['/node_modules/'],
+  preset: '@vue/cli-plugin-unit-jest',
+  //transformIgnorePatterns: ['/node_modules/(?!@vue/test-utils)'],
 };
