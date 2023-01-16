@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const mockAuth = adapter => {
-  const injector = require('inject-loader!@/api/auth');
+  const injector = require('inject-loader!@/api/auth.js');
   const clientMock = injector({
     './client': axios.create({ adapter }),
   });
@@ -10,7 +10,7 @@ const mockAuth = adapter => {
 
 describe('Auth API module', () => {
   describe('login', () => {
-    const token = '12345abcde';
+    const token = '1234567890abcde';
     const userId = 1;
     const address = 'foo@admin.com';
     const password = '12345678';

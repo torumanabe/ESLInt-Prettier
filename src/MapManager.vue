@@ -9,17 +9,17 @@
           logout
         </router-link>
       </li>
-    </ul>  
+    </ul>
     <ul class="managemap">
       <li>
-        <input  
+        <input
           ref="input"
           accept=".jpg,.jpeg,.png,.gif"
           style="display: none"
           type="file"
           @change="selectedFile()"
-        > 
-        <button @click="createNewMap()">       
+        >
+        <button @click="createNewMap()">
           Create Map
         </button>
       </li>
@@ -27,7 +27,7 @@
         <button @click="openMap()">
           Open Map
         </button>
-        <VueModal 
+        <VueModal
           v-if="modal_open"
           :list="map_list"
           @my-click="modal_open=$event"

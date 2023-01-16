@@ -6,14 +6,14 @@ const mockLoginAction = login => {
 
   const actionMocks = actionInjector({
     '../api': {
-      Autth: { login },
+      Auth: { login },
     },
   });
 
   return actionMocks.default.login;
 };
 
-describe('loignAction', () => {
+describe('loginAction', () => {
   const address = 'foo@admin.com';
   const password = '123456';
   let commit;

@@ -1,4 +1,3 @@
-import { isTeleport } from '@vue/test-utils/dist/vnodeTransformers/util';
 import axios from 'axios';
 
 const mockAuth = adapter => {
@@ -17,7 +16,7 @@ describe('Auth APIモジュール', () => {
     const password = '12345678';
 
     describe('成功', () => {
-      isTeleport('token, userIdが取得できること', done => {
+      it('token, userIdが取得できること', done => {
         const adapter = config => {
           return new Promise((resolve, reject) => {
             resolve({ data: { token, userId }, status: 200 });
@@ -36,7 +35,7 @@ describe('Auth APIモジュール', () => {
     });
 
     describe('失敗', () => {
-      isTeleport('エラーメッセージを取得できること', done => {
+      it('エラーメッセージを取得できること', done => {
         const message = 'failed login';
         const adapter = config => {
           return new Promise((resolve, reject) => {

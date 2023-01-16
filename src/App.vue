@@ -3,3 +3,4 @@
   <router-view/>
  </ErrorBoundary>
 </template>
+

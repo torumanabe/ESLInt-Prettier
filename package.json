@@ -2,59 +2,45 @@
   "name": "eslint-prettier",
   "version": "1.0.0",
   "description": "",
-  "main": "text.js",
-  "scripts": {
-    "test": "jest",
-    "format": "prettier src/*.js --write",
-    "start": "node .",
-    "lint": "eslint src/*.js",
-    "lint:fix": "eslint src/*.js --fix",
-    "lint:fix && format": "eslint src/*.js --fix && format"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/torumanabe/ESLInt-Prettier.git"
-  },
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/torumanabe/ESLInt-Prettier/issues"
+  "scripts": {
+    "test:unit": "vue-cli-service test:unit",
+    "lint": "eslint src/*.js",
+    "format": "prettier src/*.js --write",
+    "lint:fix": "eslint src/*.js --fix",
+    "lint:fix && format": "eslint src/*.js --fix && format",
+    "start": "node .",
+    "test": "jest"
   },
-  "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme",
-  "devDependencies": {
+  "main": "text.js",
+  "dependencies": {
     "@vue/test-utils": "^2.2.7",
+    "@vue/vue2-jest": "^29.2.2",
+    "axios": "^1.2.2",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.1",
+    "inject-loader": "^2.0.1",
+    "jest": "^29.3.1",
+    "mrm": "^0.1.2",
+    "prettier": "^2.7.1",
+    "vue": "^2.7.14",
+    "vue-template-compiler": "^2.7.14",
+    "vuex": "^4.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@babel/preset-env": "^7.20.2",
+    "@vue/babel-preset-app": "^5.0.8",
+    "@vue/cli-plugin-unit-jest": "^5.0.8",
+    "@vue/compiler-dom": "^3.2.45",
     "eslint": "^8.23.1",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.2.5",
     "eslint-plugin-promise": "^6.0.1",
-    "jsdom": "^21.0.0",
-    "jsdom-global": "^3.0.2",
+    "jest-environment-jsdom": "^29.3.1",
     "mocha": "^10.2.0",
     "sinon": "^15.0.1"
-  },
-  "dependencies": {
-    "@vue/cli-plugin-unit-jest": "^5.0.8",
-    "@vue/vue2-jest": "^29.2.2",
-    "eslint-config-prettier": "^8.5.0",
-    "husky": "^8.0.1",
-    "jest": "^29.3.1",
-    "mrm": "^0.1.2",
-    "prettier": "^2.7.1",
-    "vue": "^2.7.14",
-    "vue-template-compiler": "^2.7.14"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint:fix",
-      "format"
-    ]
   },
   "prettier": {
     "semi": true,
@@ -63,5 +49,26 @@
     "printWidth": 80,
     "trailingComma": "es5",
     "arrowParens": "avoid"
+  },
+  "bugs": {
+    "url": "https://github.com/torumanabe/ESLInt-Prettier/issues"
+  },
+  "homepage": "https://github.com/torumanabe/ESLInt-Prettier#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "lint-staged"
+    }
+  },
+  "license": "ISC",
+  "lint-staged": {
+    "*.js": [
+      "eslint:fix",
+      "format"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/torumanabe/ESLInt-Prettier.git"
   }
 }
