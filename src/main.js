@@ -21,5 +21,3 @@ new Vue({
   store,
   render: h => h(App),
 });
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.min.js"></script>;
