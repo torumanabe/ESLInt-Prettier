@@ -1,8 +1,8 @@
-import { mount, shallowMount } from '@vue/test-utils';
+import { mount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import KbnLoginView from '@/components/templates/KbnLoginView.vue';
 
-const localVue = shallowMount();
+const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe('KbnLoginView', () => {

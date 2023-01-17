@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import 'es6-promise/auto';
 import App from './App';
-import ErrorBoundary from './App';
+import ErrorBoundary from './ErrorBoundary.vue';
 import router from './router';
 import store from './store';
 

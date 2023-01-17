@@ -33,3 +33,10 @@ export default {
  }
 }
 </script>
+
+<style scoped>
+.error {
+ color: red;
+ text-align: left;
+}
+</style>

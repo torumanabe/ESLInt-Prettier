@@ -1,7 +1,4 @@
-<template>
- <p>ログインページ</p>
-</template>
-<template>
+ <template>
  <div class="login-view">
   <h1>Kanban App</h1>
   <KbnLoginForm :onlogin="handleLogin" />
